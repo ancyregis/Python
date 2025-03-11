@@ -1,0 +1,35 @@
+start
+print "enter the total bill amount"
+  read billamount
+print" enter the service_quality"
+  read service_quality
+set percentage=0
+	if 
+	  service_quality== "poor"then
+	  percentage =10
+	else if  
+	  service_quality=="fair"then
+	  percentage =15
+	else if  
+	  service_quality=="good"then
+	  percentage =18
+	else if  
+	  service_quality=="execellent"then
+  	  percentage =20
+	else
+	  print"error invalid service quality entered"
+exit
+
+print"enter the number of people splitting the bill"
+read people
+
+set tipamount = (billamount * percentage)/100
+set totalamount=billamount +tipamount
+set perperson = totalamount/people
+
+print "bill_amout " + billamount
+print "service_quality" + service_quality +"("+percentage +"%)"
+print "tip_amount" + tipamount
+print "total_amount"+ totalamount
+print "per_person" + perperson
+end
