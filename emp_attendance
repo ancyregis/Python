@@ -1,0 +1,43 @@
+employees = [
+    (101, "Alice", "HR"),
+    (102, "Bob", "IT"),
+    (103, "Charlie", "Finance"),
+    (104, "David", "Marketing"),
+    (105, "Eve", "Sales")
+]
+
+attendance_records = []
+
+def mark_attendance(employee_id, date, status):
+    attendance_records.append((employee_id, date, status))
+    print(f"Attendance marked for Employee ID {employee_id} as {status} on {date}.")
+
+def search_attendance(employee_id):
+    records = [record for record in attendance_records if record[0] == employee_id]
+    
+    if records:
+        print(f"\nAttendance Records for Employee ID {employee_id}:")
+        for record in records:
+            print(f"Date: {record[1]}, Status: {record[2]}")
+    else:
+        print(f"No attendance records found for Employee ID {employee_id}.")
+
+def display_summary():
+    print("\nAttendance Summary:")
+    summary = {emp[0]: 0 for emp in employees} 
+    
+    for emp_id in summary:
+        summary[emp_id] = sum(1 for rec in attendance_records if rec[0] == emp_id and rec[2] == "Present")
+
+    for emp_id, name, dept in employees:
+        print(f"Employee: {name} ({dept}) - Present Days: {summary[emp_id]}")
+
+mark_attendance(101, "2025-03-13", "Present")
+mark_attendance(102, "2025-03-13", "Absent")
+mark_attendance(103, "2025-03-13", "Present")
+mark_attendance(104, "2025-03-13", "Present")
+mark_attendance(105, "2025-03-13", "Absent")
+
+search_attendance(104)
+display_summary()
+
