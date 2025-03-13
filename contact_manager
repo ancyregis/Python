@@ -1,0 +1,79 @@
+contacts = []
+
+def add():
+    name = input("Enter your name: ")
+    phone = input("Phone number: ")
+    email = input("Enter email: ")
+    
+    for contact in contacts:
+        if contact[0].lower() == name.lower():
+            print("Name already exists!")
+            return
+    
+    contacts.append((name, phone, email))
+    print("Contact added successfully!")
+
+def view():
+    if not contacts:
+        print("No contacts")
+        return
+    print("List of contacts:\n")
+    for contact in contacts:
+        print(f"{contact[0]} - {contact[1]} - {contact[2]}")
+
+def search():
+    name = input("Enter name to search: ")
+    for contact in contacts:
+        if contact[0].lower() == name.lower():
+            print(f"Contact Found: {contact[0]} - {contact[1]} - {contact[2]}")
+            return
+    print("Contact not found.")
+
+def update():
+    name = input("Enter name to update: ")
+    for i, contact in enumerate(contacts):
+        if contact[0].lower() == name.lower():
+            new_phone = input("Enter new Phone Number: ")
+            contacts[i] = (contact[0], new_phone, contact[2])
+            print("Phone number updated successfully!")
+            return
+    print("Contact not found.")
+
+def delete():
+    name = input("Enter name to delete: ")
+    for contact in contacts:
+        if contact[0].lower() == name.lower():
+            contacts.remove(contact)
+            print("Contact deleted successfully!")
+            return
+    print("Contact not found.")
+
+def main():
+    while True:  # Fixed `true` to `True`
+        print("1. Add")
+        print("2. View")
+        print("3. Search")
+        print("4. Update")
+        print("5. Delete")
+        print("6. Exit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":
+            add()
+        elif choice == "2":
+            view()
+        elif choice == "3":
+            search()
+        elif choice == "4":
+            update()
+        elif choice == "5":
+            delete()
+        elif choice == "6":
+            print("Exiting contact manager.")
+            break
+        else:
+            print("Invalid choice.")
+
+main()
+
