@@ -1,0 +1,151 @@
+employees = {}
+employee_counter = 101
+def generate_employee_id():
+    global employee_counter
+    emp_id = f"E{employee_counter}"
+    employee_counter += 1
+    return emp_id
+    
+def is_valid_name(name):
+    return name.replace(" ", "").isalpha()
+
+def is_valid_age(age):
+    return age.isdigit() and int(age) > 0
+
+def add_employee():
+    global employees
+    name = input("Enter Employee Name: ").strip()
+    if not is_valid_name(name):
+        print("Invalid name. Only alphabets are allowed.")
+        return
+    age = input("Enter Employee Age: ").strip()
+    if not is_valid_age(age):
+        print("Invalid age. Enter a positive integer.")
+        return
+    
+    department = input("Enter Employee Department: ").strip()
+    
+    emp_id = generate_employee_id()
+    employees[emp_id] = {"name": name, "age": int(age), "department": department}
+    print(f"Employee {name} added successfully with ID: {emp_id}")
+
+def remove_employee():
+    emp_id = input("Enter Employee ID to remove: ").strip()
+    if emp_id in employees:
+        del employees[emp_id]
+        print(f"Employee {emp_id} removed successfully!")
+    else:
+        print("Employee ID not found.")
+        
+def update_employee():
+    emp_id = input("Enter Employee ID to update: ").strip()
+    if emp_id not in employees:
+        print("Employee ID not found.")
+        return
+    
+    print("Leave blank to keep existing value.")
+    name = input(f"Enter new name ({employees[emp_id]['name']}): ").strip()
+    if name and not is_valid_name(name):
+        print("Invalid name.")
+        return
+    
+    print("Leave blank to keep existing value.")
+    name = input(f"Enter new name ({employees[emp_id]['name']}): ").strip()
+    if name and not is_valid_name(name):
+        print("Invalid name.")
+        return
+    
+    age = input(f"Enter new age ({employees[emp_id]['age']}): ").strip()
+    if age and not is_valid_age(age):
+        print("Invalid age.")
+        return
+    
+    department = input(f"Enter new department ({employees[emp_id]['department']}): ").strip()
+    
+    if name:
+        employees[emp_id]['name'] = name
+    if age:
+        employees[emp_id]['age'] = int(age)
+    if department:
+        employees[emp_id]['department'] = department
+
+    print("Employee details updated successfully!")
+
+def search_employee():
+    choice = input("Search by 1) ID or 2) Name: ").strip()
+    if choice == "1":
+        emp_id = input("Enter Employee ID: ").strip()
+        if emp_id in employees:
+            print(f"Employee Found: {emp_id} - {employees[emp_id]}")
+        else:
+            print("Employee not found.")
+    elif choice == "2":
+        name = input("Enter Employee Name: ").strip().lower()
+        found = [f"{eid} - {emp}" for eid, emp in employees.items() if emp["name"].lower() == name]
+        if found:
+            print("Employee(s) Found:\n" + "\n".join(found))
+        else:
+            print("No employee found with that name.")
+    else:
+        print("Invalid choice.")
+
+def sort_employees():
+    print("Sort by 1) Name 2) Age 3) Department")
+    choice = input("Enter your choice: ").strip()
+    
+    if choice == "1":
+        sorted_emps = sorted(employees.items(), key=lambda x: x[1]["name"])
+    elif choice == "2":
+        sorted_emps = sorted(employees.items(), key=lambda x: x[1]["age"])
+    elif choice == "3":
+        sorted_emps = sorted(employees.items(), key=lambda x: x[1]["department"])
+    else:
+        print("Invalid choice.")
+        return
+
+    print("\nSorted Employees:")
+    for emp_id, details in sorted_emps:
+        print(f"{emp_id} - {details}")
+
+def main():
+    while True:
+        print("\nEmployee Management System")
+        print("1. Add Employee")
+        print("2. Remove Employee")
+        print("3. Update Employee")
+        print("4. Search Employee")
+        print("5. Sort Employees")
+        print("6. Exit")
+
+        choice = input("Enter your choice: ").strip()
+        
+        if choice == "1":
+            add_employee()
+        elif choice == "2":
+            remove_employee()
+        elif choice == "3":
+            update_employee()
+        elif choice == "4":
+            search_employee()
+        elif choice == "5":
+            sort_employees()
+        elif choice == "6":
+            print("Exiting Employee Management System.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+main()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
