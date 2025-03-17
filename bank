@@ -1,0 +1,99 @@
+class BankAccount:
+    total_accounts = 0  
+    def __init__(self, account_holder, account_type, initial_balance=0):
+        if not account_holder:
+            raise ValueError("Account holder name cannot be empty")
+        if initial_balance < 0:
+            raise ValueError("Initial balance cannot be negative")
+        
+        self.account_holder = account_holder
+        self.account_type = account_type
+        self.balance = initial_balance
+        self.transactions = [] 
+        
+        BankAccount.total_accounts += 1
+        self.transactions.append(("Account Opened", initial_balance))
+        print(f"New {account_type} account created for {account_holder}.")
+
+    def deposit(self, amount):
+        if not self.validate_amount(amount):
+            raise ValueError("Invalid deposit amount")
+        
+        self.balance += amount
+        self.transactions.append(("Deposit", amount))
+        print(f"Deposited ₹{amount}. New Balance: ₹{self.balance}")
+
+    def withdraw(self, amount):
+        if not self.validate_amount(amount):
+            raise ValueError("Invalid withdrawal amount")
+        if self.balance - (amount + 10) < 0: 
+            raise ValueError("Insufficient funds")
+        
+        self.balance -= (amount + 10)
+        self.transactions.append(("Withdrawal", -amount))
+        print(f"Withdrew ₹{amount}. ₹10 fee applied. New Balance: ₹{self.balance}")
+
+    def transfer(self, recipient, amount):
+        if not isinstance(recipient, BankAccount):
+            raise ValueError("Invalid recipient account")
+        if not self.validate_amount(amount):
+            raise ValueError("Invalid transfer amount")
+        if self.balance - amount < 0:
+            raise ValueError("Insufficient funds")
+
+        self.balance -= amount
+        recipient.balance += amount
+        self.transactions.append((f"Transfer to {recipient.account_holder}", -amount))
+        recipient.transactions.append((f"Transfer from {self.account_holder}", amount))
+        print(f"Transferred ₹{amount} to {recipient.account_holder}. New Balance: ₹{self.balance}")
+
+    def check_balance(self):
+        print(f"{self.account_holder}'s Balance: ₹{self.balance}")
+        return self.balance
+
+    def get_transaction_history(self):
+        print(f"Transaction history for {self.account_holder}:")
+        for txn in self.transactions:
+            print(f"{txn[0]}: ₹{txn[1]}")
+
+    @classmethod
+    def total_bank_accounts(cls):
+        print(f"Total Bank Accounts: {cls.total_accounts}")
+        return cls.total_accounts
+
+    @staticmethod
+    def validate_amount(amount):
+        return isinstance(amount, (int, float)) and 0 < amount <= 50000
+
+class SavingsAccount(BankAccount):
+    INTEREST_RATE = 0.05
+    MIN_BALANCE = 1000
+    
+    def __init__(self, account_holder, initial_balance=0):
+        if initial_balance < self.MIN_BALANCE:
+            raise ValueError("Initial balance must be at least ₹1000 for Savings Account")
+        super().__init__(account_holder, "Savings", initial_balance)
+    
+    def apply_interest(self):
+        interest = self.balance * self.INTEREST_RATE
+        self.balance += interest
+        self.transactions.append(("Interest Applied", interest))
+        print(f"Interest of ₹{interest} applied. New Balance: ₹{self.balance}")
+
+class CurrentAccount(BankAccount):
+    def __init__(self, account_holder, initial_balance=0):
+        super().__init__(account_holder, "Current", initial_balance)
+
+acc1 = SavingsAccount("Alice", 2000)
+acc2 = CurrentAccount("Bob", 5000)
+
+acc1.deposit(3000)
+acc1.withdraw(1000)
+acc1.transfer(acc2, 500)
+acc1.apply_interest()
+
+acc2.check_balance()
+acc1.get_transaction_history()
+acc2.get_transaction_history()
+BankAccount.total_bank_accounts()
+
